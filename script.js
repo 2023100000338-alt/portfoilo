@@ -378,7 +378,7 @@ class ProjectModal {
         // প্রজেক্ট: Personal Portfolio Website
         else if (title.includes('Personal Portfolio') || title.includes('Portfolio Website')) {
             this.currentProject.description = `A modern, fully responsive personal portfolio website built from scratch. It features a sleek dark-themed design, glassmorphism UI elements, smooth scrolling animations, and a dynamic project modal system. This project perfectly highlights my front-end development skills and strict attention to modern UI/UX details.`;
-            this.currentProject.github = 'https://github.com/walidbhuiyan334/walid-portfolio';
+            this.currentProject.github = 'https://github.com/2023100000338-alt/portfoilo';
             this.currentProject.demo = '#';
             this.currentProject.features = [
                 'Advanced Glassmorphism UI Design',
@@ -393,7 +393,7 @@ class ProjectModal {
         // প্রজেক্ট: Modern E-Commerce Platform
         else if (title.includes('E-Commerce Platform') || title.includes('E-Commerce')) {
             this.currentProject.description = `🚧 <strong>[Currently in Early Development]</strong> <br><br> A modern, full-stack e-commerce web application that I have recently started building. The goal of this project is to create a highly scalable shopping platform with a seamless user experience. It will eventually feature a dynamic product catalog, advanced filtering, secure user authentication, shopping cart management, and payment gateway integration.`;
-            this.currentProject.github = 'https://github.com/walidbhuiyan334/e-commerce';
+            this.currentProject.github = 'https://github.com/2023100000338-alt/portfoilo';
             this.currentProject.demo = '#';
             this.currentProject.features = [
                 'Responsive Product Catalog (In Progress)',
@@ -407,7 +407,7 @@ class ProjectModal {
         // প্রজেক্ট: Mama's Restaurant Management System
         else if (title.includes("Mama's Restaurant") || title.includes('Restaurant Management')) {
             this.currentProject.description = `A robust console-based restaurant management system developed entirely in C++. This project was built to practically apply Object-Oriented Programming (OOP) concepts and Data Structures. It efficiently handles dynamic menu management, customer order processing, and automated bill calculations including taxes and discounts.`;
-            this.currentProject.github = 'https://github.com/walidbhuiyan334/Mama-s-Restaurant-Management-System'; 
+            this.currentProject.github = 'https://github.com/2023100000338-alt/portfoilo/Mama-s-Restaurant-Management-System'; 
             this.currentProject.demo = '#'; 
             this.currentProject.features = [
                 'Object-Oriented Architecture (OOP)',
