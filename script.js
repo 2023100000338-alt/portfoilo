@@ -98,7 +98,7 @@ class TypingEffect {
         this.element = document.querySelector('.typed-text');
         this.texts = [
             "Full Stack MERN Developer",
-            "Professional Graphic Designer",
+            "Professional MicroService Designer",
         ];
         this.currentIndex = 0;
         this.charIndex = 0;
