@@ -1439,3 +1439,18 @@ globalStyles.textContent = `
     }
 `;
 document.head.appendChild(globalStyles);
+
+
+//css animition like home skill
+window.addEventListener("scroll", () => {
+    const header = document.querySelector(".navbar");
+    
+    if (window.scrollY > 50) {
+        header.classList.add("scrolled");
+        // Shrink height slightly on scroll for a premium feel
+        header.style.height = "60px";
+    } else {
+        header.classList.remove("scrolled");
+        header.style.height = "70px";
+    }
+});

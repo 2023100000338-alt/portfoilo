@@ -169,6 +169,85 @@ h3 {
     color: #fff; 
     font-size: 1.5rem; 
 }
+/* ===== ANIMATIONS ===== */
+
+/* Slide from Left (X-axis) */
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Slide from Right (X-axis) */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Application */
+.logo {
+    animation: slideInLeft 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.nav-menu li {
+    list-style: none;
+    opacity: 0;
+    animation: slideInRight 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Staggered X-axis Entry (Each link slides in one after another) */
+.nav-menu li:nth-child(1) { animation-delay: 0.1s; }
+.nav-menu li:nth-child(2) { animation-delay: 0.2s; }
+.nav-menu li:nth-child(3) { animation-delay: 0.3s; }
+.nav-menu li:nth-child(4) { animation-delay: 0.4s; }
+.nav-menu li:nth-child(5) { animation-delay: 0.5s; }
+.nav-menu li:nth-child(6) { animation-delay: 0.6s; }
+
+/* ===== HOVER EFFECTS (X-AXIS FOCUS) ===== */
+
+.nav-menu a {
+    position: relative;
+    padding: 8px 0;
+    display: inline-block;
+}
+
+/* Sliding Underline Effect */
+.nav-menu a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary-color, #00d2ff); /* Defaulting to a nice cyan if not set */
+    transition: width 0.3s ease;
+}
+
+.nav-menu a:hover::after,
+.nav-menu a.active::after {
+    width: 100%;
+}
+
+/* Subtle Link Push on Hover */
+.nav-menu a:hover {
+    transform: translateX(3px); /* Small X-axis nudge */
+}
+
+/* Scrolling effect transition */
+.navbar {
+    transition: all 0.4s ease-in-out;
+}
 
 /* ===== SECTIONS ===== */
 .section { 
