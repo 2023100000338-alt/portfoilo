@@ -332,7 +332,7 @@ class ProjectModal {
             description: card.querySelector('.project-desc')?.textContent || '',
             tags: Array.from(card.querySelectorAll('.tag')).map(tag => tag.textContent),
             image: card.querySelector('img')?.src || '',
-            github: 'https://github.com/walidbhuiyan334', // আপনার ডিফল্ট গিটহাব 
+            github: 'https://github.com/2023100000338-alt', // আপনার ডিফল্ট গিটহাব 
             demo: '#', 
             features: [
                 'Responsive Design',
@@ -344,80 +344,40 @@ class ProjectModal {
 
         // --- 2. SET SPECIFIC PROJECT DATA (নাম অনুযায়ী ডাটা পরিবর্তন) ---
         
-        // প্রজেক্ট ১: Bonggo IT Institute
-        if (title.includes('Bonggo IT Institute')) {
-            this.currentProject.description = `Bonggo IT Institute is a comprehensive, high-performance E-learning platform engineered with the MERN stack. Designed to deliver a seamless educational experience, it connects learners with expert mentors through dynamic courses and live classes. The platform features robust role-based dashboards (Admin, Instructor, Student), secure enrollment processes, and an enterprise-grade automated invoicing system, ensuring a premium user experience from onboarding to graduation.`;
-            this.currentProject.github = 'https://github.com/walidbhuiyan334/bongo-it-institute-lms';
-            this.currentProject.demo = 'https://bongo-it-institute.vercel.app';
-            this.currentProject.features = [
-                'Continuous Feature Development',
-                'Role-Based Access Control (RBAC) with JWT',
-                'Dynamic RESTful APIs for courses & enrollments',
-                'Enterprise-Grade Automated A4 PDF Invoicing',
-                'Custom CSS "PAID" stamp rendering',
-                'Seamless SPA routing with Vercel configuration',
-                'Premium dark-themed UI/UX using Tailwind CSS'
-            ];
-        } 
-        
-        // প্রজেক্ট: Elite Learner Academy
-        else if (title.includes('Elite Learner Academy')) {
-            this.currentProject.description = `A professional educational platform designed and developed for Elite Learner Academy. The website serves as a digital hub for students to explore specialized courses like Basic English and IELTS preparation. Built with a focus on clean aesthetics and responsive design, it provides an intuitive user experience for prospective learners.`;
-            this.currentProject.github = 'https://github.com/walidbhuiyan334/ELA-WEBSITE';
-            this.currentProject.demo = '#';
-            this.currentProject.features = [
-                'Dynamic Course Catalog (IELTS & Basic English)',
-                'Continuous Feature Development',
-                'Responsive & Modern Educational UI',
-                'Student Inquiry & Contact Forms',
-                'SEO Optimized Architecture',
-                'Fast Loading Performance'
-            ];
-        }
+      // --- Updated Project Data Logic ---
 
-        // প্রজেক্ট: Personal Portfolio Website
-        else if (title.includes('Personal Portfolio') || title.includes('Portfolio Website')) {
-            this.currentProject.description = `A modern, fully responsive personal portfolio website built from scratch. It features a sleek dark-themed design, glassmorphism UI elements, smooth scrolling animations, and a dynamic project modal system. This project perfectly highlights my front-end development skills and strict attention to modern UI/UX details.`;
-            this.currentProject.github = 'https://github.com/2023100000338-alt/portfoilo';
-            this.currentProject.demo = '#';
-            this.currentProject.features = [
-                'Advanced Glassmorphism UI Design',
-                'Dynamic Modal System with pure JavaScript',
-                'Smooth Scrolling & Intersection Observer Animations',
-                'Interactive Smart Contact Form',
-                'Fully Responsive & Mobile-First Layout',
-                '100% Custom CSS without external frameworks'
-            ];
-        }
+// প্রজেক্ট ১: Bonggo IT Institute
+if (title.includes('Bonggo IT Institute')) {
+    this.currentProject.description = `Bonggo IT Institute is a high-performance E-learning platform built with the MERN stack. It features role-based dashboards, secure enrollment, and automated invoicing.`;
+    this.currentProject.github = 'https://github.com/2023100000338-alt/bongo-it-institute-lms';
+    this.currentProject.demo = 'https://bongo-it-institute.vercel.app';
+} 
 
-        // প্রজেক্ট: Modern E-Commerce Platform
-        else if (title.includes('E-Commerce Platform') || title.includes('E-Commerce')) {
-            this.currentProject.description = `🚧 <strong>[Currently in Early Development]</strong> <br><br> A modern, full-stack e-commerce web application that I have recently started building. The goal of this project is to create a highly scalable shopping platform with a seamless user experience. It will eventually feature a dynamic product catalog, advanced filtering, secure user authentication, shopping cart management, and payment gateway integration.`;
-            this.currentProject.github = 'https://github.com/2023100000338-alt/portfoilo';
-            this.currentProject.demo = '#';
-            this.currentProject.features = [
-                'Responsive Product Catalog (In Progress)',
-                'Shopping Cart & State Management (Upcoming)',
-                'User Authentication System (Upcoming)',
-                'Secure Checkout & Payment Integration (Planned)',
-                'Admin Dashboard for Inventory (Planned)'
-            ];
-        }
+// প্রজেক্ট: Elite Learner Academy
+else if (title.includes('Elite Learner Academy')) {
+    this.currentProject.description = `A professional educational platform for IELTS and English preparation. features a clean UI and responsive design for prospective students.`;
+    this.currentProject.github = 'https://github.com/2023100000338-alt/ELA-WEBSITE';
+    this.currentProject.demo = '#';
+}
 
-        // প্রজেক্ট: Mama's Restaurant Management System
-        else if (title.includes("Mama's Restaurant") || title.includes('Restaurant Management')) {
-            this.currentProject.description = `A robust console-based restaurant management system developed entirely in C++. This project was built to practically apply Object-Oriented Programming (OOP) concepts and Data Structures. It efficiently handles dynamic menu management, customer order processing, and automated bill calculations including taxes and discounts.`;
-            this.currentProject.github = 'https://github.com/2023100000338-alt/portfoilo/Mama-s-Restaurant-Management-System'; 
-            this.currentProject.demo = '#'; 
-            this.currentProject.features = [
-                'Object-Oriented Architecture (OOP)',
-                'Interactive Console-based User Interface',
-                'Dynamic Menu & Order Management',
-                'Automated Billing & Tax Calculation',
-                'Efficient Data Handling using C++ STL',
-                'Clean Code with proper memory management'
-            ];
-        }
+// প্রজেক্ট: CGPA Calculator (GradePoint Pro)
+else if (title.includes('CGPA') || title.includes('Calculator')) {
+    this.currentProject.description = `A precision university GPA/CGPA calculator. Built for students to track academic progress with a mobile-first, clean interface.`;
+    this.currentProject.github = 'https://github.com/2023100000338-alt/portfoilo'; // Update with specific repo if available
+    this.currentProject.demo = 'https://eb-cgpa-calculator.vercel.app/';
+}
+
+// প্রজেক্ট: Modern E-Commerce Platform
+else if (title.includes('E-Commerce')) {
+    this.currentProject.description = `A modern full-stack shopping experience. Features dynamic product filtering, responsive dashboard, and optimized checkout flow.`;
+    this.currentProject.github = 'https://github.com/2023100000338-alt/react'; // Update with specific repo if available
+    this.currentProject.demo = 'https://eb-ecomerce.vercel.app/';
+}
+
+// প্রজেক্ট: Mama's Restaurant
+else if (title.includes("Mama's Restaurant")) {
+    this.currentProject.github = 'https://github.com/2023100000338-alt/Mama-s-Restaurant-Management-System';
+}
         
         this.renderModal();
     }
@@ -1454,3 +1414,6 @@ window.addEventListener("scroll", () => {
         header.style.height = "70px";
     }
 });
+
+
+
