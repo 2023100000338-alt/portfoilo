@@ -22,42 +22,42 @@ class MobileMenu {
         this.navMenu = document.querySelector('.nav-menu');
         this.isOpen = false;
         this.touchStartX = 0;
-        
+
         if (this.hamburger && this.navMenu) {
             this.init();
         }
     }
-    
+
     init() {
         this.hamburger.addEventListener('click', (e) => this.toggleMenu(e));
         this.setupEventListeners();
         this.setupGestureSupport();
     }
-    
+
     toggleMenu(e) {
         e?.stopPropagation();
         this.isOpen = !this.isOpen;
         this.hamburger.classList.toggle('active');
         this.navMenu.classList.toggle('active');
         document.body.style.overflow = this.isOpen ? 'hidden' : 'auto';
-        
+
         // Announce for screen readers
         this.navMenu.setAttribute('aria-expanded', this.isOpen);
     }
-    
+
     setupEventListeners() {
         // Close on link click
         this.navMenu.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => this.closeMenu());
         });
-        
+
         // Close on outside click
         document.addEventListener('click', (e) => {
             if (this.isOpen && !this.navMenu.contains(e.target) && !this.hamburger.contains(e.target)) {
                 this.closeMenu();
             }
         });
-        
+
         // Close on escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && this.isOpen) {
@@ -65,24 +65,24 @@ class MobileMenu {
             }
         });
     }
-    
+
     setupGestureSupport() {
         document.addEventListener('touchstart', (e) => {
             this.touchStartX = e.touches[0].clientX;
         }, { passive: true });
-        
+
         document.addEventListener('touchmove', (e) => {
             if (!this.isOpen) return;
-            
+
             const touchEndX = e.touches[0].clientX;
             const diffX = this.touchStartX - touchEndX;
-            
+
             if (diffX > 50) { // Swipe left to close
                 this.closeMenu();
             }
         }, { passive: true });
     }
-    
+
     closeMenu() {
         this.isOpen = false;
         this.hamburger.classList.remove('active');
@@ -98,29 +98,33 @@ class TypingEffect {
         this.element = document.querySelector('.typed-text');
         this.texts = [
             "Full Stack MERN Developer",
-            "Professional MicroService Designer",
+            "Professional Microservice Designer",
+            "Spring Boot & Java Expert",
+            "Scalable Backend Architect",
+            "Responsive Web Engineer",
+            "Database Management Specialist (MySQL & MongoDB)"
         ];
         this.currentIndex = 0;
         this.charIndex = 0;
         this.isDeleting = false;
         this.cursor = null;
-        
+
         if (this.element) {
             this.init();
         }
     }
-    
+
     init() {
         this.createCursor();
         this.type();
     }
-    
+
     createCursor() {
         this.cursor = document.createElement('span');
         this.cursor.className = 'modern-cursor';
         this.cursor.innerHTML = '<span class="cursor-glow"></span>';
         this.element.parentNode.insertBefore(this.cursor, this.element.nextSibling);
-        
+
         const style = document.createElement('style');
         style.textContent = `
             .modern-cursor {
@@ -152,28 +156,28 @@ class TypingEffect {
         `;
         document.head.appendChild(style);
     }
-    
+
     type() {
         const currentText = this.texts[this.currentIndex];
-        const displayText = this.isDeleting 
+        const displayText = this.isDeleting
             ? currentText.substring(0, this.charIndex - 1)
             : currentText.substring(0, this.charIndex + 1);
-        
+
         this.element.textContent = displayText;
-        
+
         if (!this.isDeleting && this.charIndex === currentText.length) {
             this.isDeleting = true;
             setTimeout(() => this.type(), CONFIG.newTextDelay);
             return;
         }
-        
+
         if (this.isDeleting && this.charIndex === 0) {
             this.isDeleting = false;
             this.currentIndex = (this.currentIndex + 1) % this.texts.length;
             setTimeout(() => this.type(), CONFIG.typingDelay);
             return;
         }
-        
+
         this.charIndex += this.isDeleting ? -1 : 1;
         setTimeout(() => this.type(), this.isDeleting ? CONFIG.erasingDelay : CONFIG.typingDelay);
     }
@@ -187,18 +191,18 @@ class ScrollManager {
         this.navbar = document.querySelector('.navbar');
         this.init();
     }
-    
+
     init() {
         this.createProgressBar();
         this.setupEventListeners();
         this.updateActiveNavLink();
     }
-    
+
     createProgressBar() {
         this.progressBar = document.createElement('div');
         this.progressBar.className = 'modern-progress';
         document.body.appendChild(this.progressBar);
-        
+
         const style = document.createElement('style');
         style.textContent = `
             .modern-progress {
@@ -221,10 +225,10 @@ class ScrollManager {
         `;
         document.head.appendChild(style);
     }
-    
+
     setupEventListeners() {
         window.addEventListener('scroll', () => this.handleScroll(), { passive: true });
-        
+
         if (this.backToTop) {
             this.backToTop.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -232,68 +236,68 @@ class ScrollManager {
             });
         }
     }
-    
+
     handleScroll() {
         const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
         const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
         const scrolled = (winScroll / height) * 100;
-        
+
         if (this.progressBar) {
             this.progressBar.style.width = scrolled + '%';
         }
-        
+
         if (this.backToTop) {
             this.backToTop.style.display = winScroll > CONFIG.scrollThreshold ? 'flex' : 'none';
-            this.backToTop.style.transform = winScroll > CONFIG.scrollThreshold 
+            this.backToTop.style.transform = winScroll > CONFIG.scrollThreshold
                 ? 'translateY(0)' : 'translateY(100px)';
         }
-        
+
         if (this.navbar) {
             this.navbar.classList.toggle('scrolled', winScroll > 50);
         }
     }
-    
+
     smoothScrollTo(target, duration = 800) {
         const start = window.pageYOffset;
         const change = target - start;
         const startTime = performance.now();
-        
+
         const animateScroll = (currentTime) => {
             const elapsed = currentTime - startTime;
             const progress = Math.min(elapsed / duration, 1);
-            
+
             window.scrollTo(0, start + change * this.easeInOutCubic(progress));
-            
+
             if (progress < 1) {
                 requestAnimationFrame(animateScroll);
             }
         };
-        
+
         requestAnimationFrame(animateScroll);
     }
-    
+
     easeInOutCubic(t) {
         return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
     }
-    
+
     updateActiveNavLink() {
         const sections = document.querySelectorAll('section[id]');
         const navLinks = document.querySelectorAll('.nav-menu a');
-        
+
         window.addEventListener('scroll', () => {
             let current = '';
             const scrollY = window.pageYOffset;
             const navbarHeight = this.navbar?.offsetHeight || 60;
-            
+
             sections.forEach(section => {
                 const sectionTop = section.offsetTop - navbarHeight - 100;
                 const sectionBottom = sectionTop + section.offsetHeight;
-                
+
                 if (scrollY >= sectionTop && scrollY < sectionBottom) {
                     current = section.getAttribute('id');
                 }
             });
-            
+
             navLinks.forEach(link => {
                 link.classList.toggle('active', link.getAttribute('href') === `#${current}`);
             });
@@ -308,24 +312,24 @@ class ProjectModal {
         this.currentProject = null;
         this.init();
     }
-    
+
     init() {
         document.querySelectorAll('.project-card .btn').forEach(button => {
             button.addEventListener('click', (e) => this.openModal(e));
         });
-        
+
         this.addModalStyles();
     }
-    
+
     openModal(e) {
         e.preventDefault();
         e.stopPropagation();
-        
+
         const card = e.target.closest('.project-card');
         if (!card) return;
-        
+
         const title = card.querySelector('.project-title')?.textContent || 'Project Title';
-        
+
         // --- 1. SET DEFAULT DATA (সব প্রজেক্টের জন্য বেসিক ডাটা) ---
         this.currentProject = {
             title: title,
@@ -333,7 +337,7 @@ class ProjectModal {
             tags: Array.from(card.querySelectorAll('.tag')).map(tag => tag.textContent),
             image: card.querySelector('img')?.src || '',
             github: 'https://github.com/2023100000338-alt', // আপনার ডিফল্ট গিটহাব 
-            demo: '#', 
+            demo: '#',
             features: [
                 'Responsive Design',
                 'Clean Architecture',
@@ -343,51 +347,51 @@ class ProjectModal {
         };
 
         // --- 2. SET SPECIFIC PROJECT DATA (নাম অনুযায়ী ডাটা পরিবর্তন) ---
-        
-      // --- Updated Project Data Logic ---
 
-// প্রজেক্ট ১: Bonggo IT Institute
-if (title.includes('Bonggo IT Institute')) {
-    this.currentProject.description = `Bonggo IT Institute is a high-performance E-learning platform built with the MERN stack. It features role-based dashboards, secure enrollment, and automated invoicing.`;
-    this.currentProject.github = 'https://github.com/2023100000338-alt/bongo-it-institute-lms';
-    this.currentProject.demo = 'https://bongo-it-institute.vercel.app';
-} 
+        // --- Updated Project Data Logic ---
 
-// প্রজেক্ট: Elite Learner Academy
-else if (title.includes('Elite Learner Academy')) {
-    this.currentProject.description = `A professional educational platform for IELTS and English preparation. features a clean UI and responsive design for prospective students.`;
-    this.currentProject.github = 'https://github.com/2023100000338-alt/ELA-WEBSITE';
-    this.currentProject.demo = '#';
-}
+        // প্রজেক্ট ১: Bonggo IT Institute
+        if (title.includes('Bonggo IT Institute')) {
+            this.currentProject.description = `Bonggo IT Institute is a high-performance E-learning platform built with the MERN stack. It features role-based dashboards, secure enrollment, and automated invoicing.`;
+            this.currentProject.github = 'https://github.com/2023100000338-alt/bongo-it-institute-lms';
+            this.currentProject.demo = 'https://bongo-it-institute.vercel.app';
+        }
 
-// প্রজেক্ট: CGPA Calculator (GradePoint Pro)
-else if (title.includes('CGPA') || title.includes('Calculator')) {
-    this.currentProject.description = `A precision university GPA/CGPA calculator. Built for students to track academic progress with a mobile-first, clean interface.`;
-    this.currentProject.github = 'https://github.com/2023100000338-alt/portfoilo'; // Update with specific repo if available
-    this.currentProject.demo = 'https://eb-cgpa-calculator.vercel.app/';
-}
+        // প্রজেক্ট: Elite Learner Academy
+        else if (title.includes('Elite Learner Academy')) {
+            this.currentProject.description = `A professional educational platform for IELTS and English preparation. features a clean UI and responsive design for prospective students.`;
+            this.currentProject.github = 'https://github.com/2023100000338-alt/ELA-WEBSITE';
+            this.currentProject.demo = '#';
+        }
 
-// প্রজেক্ট: Modern E-Commerce Platform
-else if (title.includes('E-Commerce')) {
-    this.currentProject.description = `A modern full-stack shopping experience. Features dynamic product filtering, responsive dashboard, and optimized checkout flow.`;
-    this.currentProject.github = 'https://github.com/2023100000338-alt/react'; // Update with specific repo if available
-    this.currentProject.demo = 'https://eb-ecomerce.vercel.app/';
-}
+        // প্রজেক্ট: CGPA Calculator (GradePoint Pro)
+        else if (title.includes('CGPA') || title.includes('Calculator')) {
+            this.currentProject.description = `A precision university GPA/CGPA calculator. Built for students to track academic progress with a mobile-first, clean interface.`;
+            this.currentProject.github = 'https://github.com/2023100000338-alt/portfoilo'; // Update with specific repo if available
+            this.currentProject.demo = 'https://eb-cgpa-calculator.vercel.app/';
+        }
 
-// প্রজেক্ট: Mama's Restaurant
-else if (title.includes("Mama's Restaurant")) {
-    this.currentProject.github = 'https://github.com/2023100000338-alt/Mama-s-Restaurant-Management-System';
-}
-        
+        // প্রজেক্ট: Modern E-Commerce Platform
+        else if (title.includes('E-Commerce')) {
+            this.currentProject.description = `A modern full-stack shopping experience. Features dynamic product filtering, responsive dashboard, and optimized checkout flow.`;
+            this.currentProject.github = 'https://github.com/2023100000338-alt/react'; // Update with specific repo if available
+            this.currentProject.demo = 'https://eb-ecomerce.vercel.app/';
+        }
+
+        // প্রজেক্ট: Mama's Restaurant
+        else if (title.includes("Mama's Restaurant")) {
+            this.currentProject.github = 'https://github.com/2023100000338-alt/Mama-s-Restaurant-Management-System';
+        }
+
         this.renderModal();
     }
-    
+
     renderModal() {
         this.modal = document.createElement('div');
         this.modal.className = 'glass-modal';
         this.modal.setAttribute('role', 'dialog');
         this.modal.setAttribute('aria-modal', 'true');
-        
+
         this.modal.innerHTML = `
             <div class="modal-container">
                 <button class="modal-close" aria-label="Close modal">
@@ -406,9 +410,9 @@ else if (title.includes("Mama's Restaurant")) {
                     <h2 class="modal-title gradient-text">${this.currentProject.title}</h2>
                     
                     <div class="modal-tags">
-                        ${this.currentProject.tags.map(tag => 
-                            `<span class="modern-tag">${tag}</span>`
-                        ).join('')}
+                        ${this.currentProject.tags.map(tag =>
+            `<span class="modern-tag">${tag}</span>`
+        ).join('')}
                     </div>
                     
                     <div class="modal-description">
@@ -418,9 +422,9 @@ else if (title.includes("Mama's Restaurant")) {
                     <div class="modal-features">
                         <h3>Key Features</h3>
                         <ul class="feature-list">
-                            ${this.currentProject.features.map(feature => 
-                                `<li><i class="fas fa-check-circle"></i> ${feature}</li>`
-                            ).join('')}
+                            ${this.currentProject.features.map(feature =>
+            `<li><i class="fas fa-check-circle"></i> ${feature}</li>`
+        ).join('')}
                         </ul>
                     </div>
                     
@@ -439,42 +443,42 @@ else if (title.includes("Mama's Restaurant")) {
                 </div>
             </div>
         `;
-        
+
         document.body.appendChild(this.modal);
         document.body.style.overflow = 'hidden';
-        
+
         // Trigger reflow for animation
         setTimeout(() => {
             this.modal.classList.add('active');
         }, 10);
-        
+
         this.setupModalEvents();
     }
-    
+
     setupModalEvents() {
         const closeBtn = this.modal.querySelector('.modal-close');
-        
+
         closeBtn.addEventListener('click', () => this.closeModal());
-        
+
         this.modal.addEventListener('click', (e) => {
             if (e.target === this.modal) this.closeModal();
         });
-        
+
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') this.closeModal();
         }, { once: true });
     }
-    
+
     closeModal() {
         this.modal.classList.remove('active');
         setTimeout(() => {
-            if(this.modal && this.modal.parentNode) {
+            if (this.modal && this.modal.parentNode) {
                 this.modal.remove();
             }
             document.body.style.overflow = 'auto';
         }, 300);
     }
-    
+
     addModalStyles() {
         if (document.getElementById('modal-styles')) return; // Prevent duplicate styles
 
@@ -732,18 +736,18 @@ class ContactForm {
             this.init();
         }
     }
-    
+
     init() {
         this.form.addEventListener('submit', (e) => this.handleSubmit(e));
         this.setupInputEffects();
     }
-    
+
     setupInputEffects() {
         this.form.querySelectorAll('input, textarea').forEach(field => {
             field.addEventListener('focus', () => {
                 field.parentElement.classList.add('focused');
             });
-            
+
             field.addEventListener('blur', () => {
                 field.parentElement.classList.remove('focused');
                 if (field.value) {
@@ -754,42 +758,42 @@ class ContactForm {
             });
         });
     }
-    
-    async handleSubmit(e) {
-    e.preventDefault();
-    
-    const formData = this.getFormData();
-    
-    if (!this.validateForm(formData)) {
-        return;
-    }
-    
-    const submitBtn = this.form.querySelector('button[type="submit"]');
-    const originalContent = submitBtn.innerHTML;
-    
-    // বাটনটি ডিজেবল করা এবং এনিমেশন দেখানো
-    this.setLoadingState(submitBtn, true);
-    
-    try {
-        await this.submitToAPI(formData);
-        
-        // সাকসেস মেসেজ দেখানোর আগে ফর্মটি স্মুথলি পরিষ্কার করা
-        this.form.style.opacity = '0.5'; 
-        
-        setTimeout(() => {
-            this.showMessage('✨ Success! Your message is on its way.', 'success');
-            this.form.reset();
-            this.resetFieldStates();
-            this.form.style.opacity = '1';
-        }, 500);
 
-    } catch (error) {
-        this.showMessage('Oops! Something went wrong. Please try again.', 'error');
-    } finally {
-        this.setLoadingState(submitBtn, false, originalContent);
+    async handleSubmit(e) {
+        e.preventDefault();
+
+        const formData = this.getFormData();
+
+        if (!this.validateForm(formData)) {
+            return;
+        }
+
+        const submitBtn = this.form.querySelector('button[type="submit"]');
+        const originalContent = submitBtn.innerHTML;
+
+        // বাটনটি ডিজেবল করা এবং এনিমেশন দেখানো
+        this.setLoadingState(submitBtn, true);
+
+        try {
+            await this.submitToAPI(formData);
+
+            // সাকসেস মেসেজ দেখানোর আগে ফর্মটি স্মুথলি পরিষ্কার করা
+            this.form.style.opacity = '0.5';
+
+            setTimeout(() => {
+                this.showMessage('✨ Success! Your message is on its way.', 'success');
+                this.form.reset();
+                this.resetFieldStates();
+                this.form.style.opacity = '1';
+            }, 500);
+
+        } catch (error) {
+            this.showMessage('Oops! Something went wrong. Please try again.', 'error');
+        } finally {
+            this.setLoadingState(submitBtn, false, originalContent);
+        }
     }
-}
-    
+
     getFormData() {
         return {
             name: this.form.querySelector('#name')?.value.trim() || this.form.querySelector('[name="Name"]')?.value.trim() || '',
@@ -798,25 +802,25 @@ class ContactForm {
             message: this.form.querySelector('#message')?.value.trim() || this.form.querySelector('[name="Message"]')?.value.trim() || ''
         };
     }
-    
+
     validateForm(data) {
         if (!data.name || !data.email || !data.message) {
             this.showMessage('Please fill in all required fields', 'error');
             return false;
         }
-        
+
         if (!this.isValidEmail(data.email)) {
             this.showMessage('Please enter a valid email address', 'error');
             return false;
         }
-        
+
         return true;
     }
-    
+
     isValidEmail(email) {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     }
-    
+
     async submitToAPI(data) {
         // Apps Script এর জন্য ডাটা URLSearchParams এ কনভার্ট করতে হয়
         const formData = new URLSearchParams();
@@ -826,43 +830,43 @@ class ContactForm {
         formData.append("message", data.message);
 
         // ⚠️ আপনার Google Apps Script থেকে পাওয়া Web App URL টি নিচের লাইনে বসান
-        const scriptURL = "https://script.google.com/macros/s/AKfycbxyZlTHqGY2wim9qt0gHD00_fT72-eqPwgwYu6ZUnQARIEn1ayt9yvTPeN8JyuD6xX2Zg/exec"; 
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxyZlTHqGY2wim9qt0gHD00_fT72-eqPwgwYu6ZUnQARIEn1ayt9yvTPeN8JyuD6xX2Zg/exec";
 
         try {
-        const response = await fetch(scriptURL, {
-            method: "POST",
-            body: formData,
-            mode: 'no-cors' // এটি ব্রাউজারের CORS এরর এড়িয়ে ডাটা পাঠাতে সাহায্য করবে
-        });
+            const response = await fetch(scriptURL, {
+                method: "POST",
+                body: formData,
+                mode: 'no-cors' // এটি ব্রাউজারের CORS এরর এড়িয়ে ডাটা পাঠাতে সাহায্য করবে
+            });
 
-        // যেহেতু 'no-cors' মোডে রেসপন্স চেক করা যায় না, 
-        // এবং আপনার ইমেইল আসছে, তাই আমরা সরাসরি Success রিটার্ন করব।
-        console.log('Request sent to Google Apps Script');
-        return { success: true };
+            // যেহেতু 'no-cors' মোডে রেসপন্স চেক করা যায় না, 
+            // এবং আপনার ইমেইল আসছে, তাই আমরা সরাসরি Success রিটার্ন করব।
+            console.log('Request sent to Google Apps Script');
+            return { success: true };
 
-    } catch (error) {
-        console.error("Error sending message:", error);
-        throw error;
+        } catch (error) {
+            console.error("Error sending message:", error);
+            throw error;
+        }
     }
-}
-    
+
     setLoadingState(button, isLoading, originalContent = '') {
         button.disabled = isLoading;
-        button.innerHTML = isLoading 
-            ? '<i class="fas fa-spinner fa-spin"></i> Sending...' 
+        button.innerHTML = isLoading
+            ? '<i class="fas fa-spinner fa-spin"></i> Sending...'
             : originalContent;
     }
-    
+
     resetFieldStates() {
         this.form.querySelectorAll('.focused, .filled').forEach(el => {
             el.classList.remove('focused', 'filled');
         });
     }
-    
+
     showMessage(text, type) {
         const existingMsg = this.form.querySelector('.form-message-modern');
         if (existingMsg) existingMsg.remove();
-        
+
         const message = document.createElement('div');
         message.className = `form-message-modern ${type}`;
         message.innerHTML = `
@@ -876,9 +880,9 @@ class ContactForm {
                 <i class="fas fa-times"></i>
             </button>
         `;
-        
+
         this.form.appendChild(message);
-        
+
         setTimeout(() => message.remove(), 5000);
     }
 }
@@ -889,7 +893,7 @@ class AnimationObserver {
         this.observer = null;
         this.init();
     }
-    
+
     init() {
         this.observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -902,22 +906,22 @@ class AnimationObserver {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
         });
-        
+
         this.observeElements();
     }
-    
+
     observeElements() {
         const elements = document.querySelectorAll(
             '.project-card, .service-card, .blog-card, .skill-category, .testimonial-card'
         );
-        
+
         elements.forEach(el => {
             el.style.opacity = '0';
             el.style.transform = 'translateY(30px)';
             el.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
             this.observer.observe(el);
         });
-        
+
         // Add styles for in-view elements
         const style = document.createElement('style');
         style.textContent = `
@@ -935,7 +939,7 @@ class VisitorAnalytics {
     constructor() {
         this.init();
     }
-    
+
     init() {
         try {
             const visits = this.updateVisitorCount();
@@ -945,7 +949,7 @@ class VisitorAnalytics {
             console.log('Analytics unavailable');
         }
     }
-    
+
     updateVisitorCount() {
         const key = CONFIG.localStoragePrefix + 'visits';
         let visits = localStorage.getItem(key);
@@ -953,7 +957,7 @@ class VisitorAnalytics {
         localStorage.setItem(key, visits);
         return visits;
     }
-    
+
     displayVisitorCount(visits) {
         const footer = document.querySelector('footer p');
         if (footer && !footer.querySelector('.visitor-badge')) {
@@ -965,7 +969,7 @@ class VisitorAnalytics {
                 <span class="label">views</span>
             `;
             footer.appendChild(badge);
-            
+
             // Add badge styles
             const style = document.createElement('style');
             style.textContent = `
@@ -997,7 +1001,7 @@ class VisitorAnalytics {
             document.head.appendChild(style);
         }
     }
-    
+
     trackPageView() {
         // Track page load time
         const loadTime = performance.now();
@@ -1010,21 +1014,21 @@ class ClipboardManager {
     constructor() {
         this.init();
     }
-    
+
     init() {
         const emailElement = document.querySelector('.hero-info span');
         if (emailElement?.textContent.includes('@')) {
             this.setupEmailCopy(emailElement);
         }
     }
-    
+
     setupEmailCopy(element) {
         element.style.cursor = 'pointer';
         element.title = 'Click to copy email';
-        
+
         element.addEventListener('click', async () => {
             const email = element.textContent;
-            
+
             try {
                 await navigator.clipboard.writeText(email);
                 this.showTooltip(element, '✓ Email copied!');
@@ -1033,24 +1037,24 @@ class ClipboardManager {
             }
         });
     }
-    
+
     showTooltip(element, message, type = 'success') {
         const tooltip = document.createElement('div');
         tooltip.className = `copy-tooltip ${type}`;
         tooltip.textContent = message;
-        
+
         const rect = element.getBoundingClientRect();
         tooltip.style.position = 'fixed';
         tooltip.style.top = rect.top - 40 + 'px';
         tooltip.style.left = rect.left + rect.width / 2 + 'px';
-        
+
         document.body.appendChild(tooltip);
-        
+
         setTimeout(() => {
             tooltip.style.opacity = '0';
             setTimeout(() => tooltip.remove(), 300);
         }, 2000);
-        
+
         // Add tooltip styles
         const style = document.createElement('style');
         style.textContent = `
@@ -1081,7 +1085,7 @@ class LazyLoader {
     constructor() {
         this.init();
     }
-    
+
     init() {
         if ('IntersectionObserver' in window) {
             this.observer = new IntersectionObserver((entries) => {
@@ -1094,19 +1098,19 @@ class LazyLoader {
                 rootMargin: '50px',
                 threshold: 0.01
             });
-            
+
             this.observeImages();
         } else {
             this.loadAllImages();
         }
     }
-    
+
     observeImages() {
         document.querySelectorAll('img[data-src]').forEach(img => {
             this.observer.observe(img);
         });
     }
-    
+
     loadImage(img) {
         if (img.dataset.src) {
             img.src = img.dataset.src;
@@ -1115,7 +1119,7 @@ class LazyLoader {
             this.observer.unobserve(img);
         }
     }
-    
+
     loadAllImages() {
         document.querySelectorAll('img[data-src]').forEach(img => {
             img.src = img.dataset.src;
@@ -1159,40 +1163,40 @@ const handleResize = debounce(() => {
 }, 250);
 
 // About section tabs functionality
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const tabBtns = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
-    
+
     tabBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             // Remove active class from all buttons
             tabBtns.forEach(b => b.classList.remove('active'));
-            
+
             // Add active class to clicked button
             btn.classList.add('active');
-            
+
             // Get the tab id
             const tabId = btn.getAttribute('data-tab');
-            
+
             // Hide all tab contents
             tabContents.forEach(content => {
                 content.classList.remove('active');
             });
-            
+
             // Show the selected tab content
             document.getElementById(tabId).classList.add('active');
         });
     });
-    
+
     // Stat Numbers Animation
     const statNumbers = document.querySelectorAll('.stat-number');
-    
+
     function animateStats() {
         statNumbers.forEach(stat => {
             const target = parseInt(stat.getAttribute('data-target'));
             let current = 0;
             const increment = target / 50;
-            
+
             const timer = setInterval(() => {
                 current += increment;
                 if (current >= target) {
@@ -1204,7 +1208,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 20);
         });
     }
-    
+
     // Trigger animation when stats come into view
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -1214,7 +1218,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }, { threshold: 0.5 });
-    
+
     const statsContainer = document.querySelector('.stats-container');
     if (statsContainer) {
         observer.observe(statsContainer);
@@ -1228,24 +1232,24 @@ class LoadMoreProjects {
         this.loadMoreBtn = document.getElementById('load-more-btn');
         this.visibleCount = 3; // শুরুতে কয়টা দেখাবে
         this.increment = 3; // ক্লিক করলে কয়টা বাড়বে
-        
-        if(this.grid && this.loadMoreBtn) {
+
+        if (this.grid && this.loadMoreBtn) {
             this.cards = Array.from(this.grid.querySelectorAll('.project-card'));
             this.init();
         }
     }
-    
+
     init() {
         // শুরুতে প্রথম ৩টা বাদে বাকিগুলো হাইড করে দাও
         this.updateVisibility();
-        
+
         // বাটনে ক্লিক ইভেন্ট
         this.loadMoreBtn.addEventListener('click', () => {
             this.visibleCount += this.increment;
             this.updateVisibility();
         });
     }
-    
+
     updateVisibility() {
         this.cards.forEach((card, index) => {
             if (index < this.visibleCount) {
@@ -1256,7 +1260,7 @@ class LoadMoreProjects {
                 card.classList.remove('show');
             }
         });
-        
+
         // যদি সবগুলো প্রজেক্ট দেখা হয়ে যায়, বাটন হাইড করে দাও
         if (this.visibleCount >= this.cards.length) {
             this.loadMoreBtn.style.display = 'none';
@@ -1271,37 +1275,37 @@ class LoadMoreGrid {
         this.loadMoreBtn = document.getElementById(btnId);
         this.visibleCount = initialCount;
         this.increment = increment;
-        
-        if(this.grid && this.loadMoreBtn) {
+
+        if (this.grid && this.loadMoreBtn) {
             // গ্রিডের ভেতরের সব কার্ড সিলেক্ট করা
             this.cards = Array.from(this.grid.children);
-            
+
             // প্রথমে সব হাইড করা
             this.cards.forEach(card => {
                 card.style.display = 'none';
                 card.style.opacity = '0';
             });
-            
+
             this.init();
         }
     }
-    
+
     init() {
         this.updateVisibility();
-        
+
         // বাটনে ক্লিক ইভেন্ট
         this.loadMoreBtn.addEventListener('click', () => {
             this.visibleCount += this.increment;
             this.updateVisibility();
         });
     }
-    
+
     updateVisibility() {
         this.cards.forEach((card, index) => {
             if (index < this.visibleCount) {
                 card.style.display = 'inline-block'; // Masonry গ্রিডের জন্য এটি বেস্ট
-                card.style.width = '100%'; 
-                
+                card.style.width = '100%';
+
                 // হালকা ডিলের সাথে অ্যানিমেশন অ্যাড করা
                 setTimeout(() => {
                     card.classList.add('show');
@@ -1311,7 +1315,7 @@ class LoadMoreGrid {
                 card.classList.remove('show');
             }
         });
-        
+
         // সব দেখা হয়ে গেলে বাটন গায়েব হয়ে যাবে
         if (this.visibleCount >= this.cards.length) {
             this.loadMoreBtn.style.display = 'none';
@@ -1331,31 +1335,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const visitorAnalytics = new VisitorAnalytics();
     const clipboardManager = new ClipboardManager();
     const lazyLoader = new LazyLoader();
-    
+
     // ✅ Load More গ্রিডগুলো একদম সঠিকভাবে কল করা হলো
     // Web Development: ৩টা দেখাবে, ক্লিক করলে ৩টা বাড়বে
-    new LoadMoreGrid('coding-projects-grid', 'load-more-btn', 3, 3,3,3);
-    
+    new LoadMoreGrid('coding-projects-grid', 'load-more-btn', 3, 3, 3, 3);
+
     // Graphic Design: ৮টা দেখাবে, ক্লিক করলে ৮টা বাড়বে
-    new LoadMoreGrid('graphic-designs-grid', 'load-more-graphics-btn', 8, 6,6,6);
-    
+    new LoadMoreGrid('graphic-designs-grid', 'load-more-graphics-btn', 8, 6, 6, 6);
+
     // Update footer year
     updateFooterYear();
-    
+
     // Add resize listener
     window.addEventListener('resize', handleResize);
-    
+
     // Add keyboard navigation support
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Tab') {
             document.body.classList.add('keyboard-nav');
         }
     });
-    
+
     document.addEventListener('mousedown', () => {
         document.body.classList.remove('keyboard-nav');
     });
-    
+
 });
 
 // ===== ADD GLOBAL STYLES =====
@@ -1404,7 +1408,7 @@ document.head.appendChild(globalStyles);
 //css animition like home skill
 window.addEventListener("scroll", () => {
     const header = document.querySelector(".navbar");
-    
+
     if (window.scrollY > 50) {
         header.classList.add("scrolled");
         // Shrink height slightly on scroll for a premium feel
