@@ -29,69 +29,69 @@ class MobileMenu {
     }
 
     init() {
+        // Toggle on click
         this.hamburger.addEventListener('click', (e) => this.toggleMenu(e));
-        this.setupEventListeners();
-        this.setupGestureSupport();
-    }
 
-    toggleMenu(e) {
-        e?.stopPropagation();
-        this.isOpen = !this.isOpen;
-        this.hamburger.classList.toggle('active');
-        this.navMenu.classList.toggle('active');
-        document.body.style.overflow = this.isOpen ? 'hidden' : 'auto';
-
-        // Announce for screen readers
-        this.navMenu.setAttribute('aria-expanded', this.isOpen);
-    }
-
-    setupEventListeners() {
-        // Close on link click
+        // Close when clicking a link
         this.navMenu.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => this.closeMenu());
         });
 
-        // Close on outside click
-        document.addEventListener('click', (e) => {
-            if (this.isOpen && !this.navMenu.contains(e.target) && !this.hamburger.contains(e.target)) {
-                this.closeMenu();
-            }
-        });
-
-        // Close on escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.isOpen) {
-                this.closeMenu();
-            }
-        });
+        // Swipe support
+        this.setupGestures();
     }
 
-    setupGestureSupport() {
-        document.addEventListener('touchstart', (e) => {
-            this.touchStartX = e.touches[0].clientX;
-        }, { passive: true });
+    toggleMenu(e) {
+        e?.stopPropagation();
+        this.isOpen ? this.closeMenu() : this.openMenu();
+    }
 
-        document.addEventListener('touchmove', (e) => {
-            if (!this.isOpen) return;
-
-            const touchEndX = e.touches[0].clientX;
-            const diffX = this.touchStartX - touchEndX;
-
-            if (diffX > 50) { // Swipe left to close
-                this.closeMenu();
-            }
-        }, { passive: true });
+    openMenu() {
+        this.isOpen = true;
+        this.hamburger.classList.add('active');
+        this.navMenu.classList.add('active');
+        
+        // Change icon to 'X'
+        const icon = this.hamburger.querySelector('i');
+        icon.classList.replace('fa-bars', 'fa-times');
+        
+        // Prevent body scroll (Professional touch)
+        document.body.style.overflow = 'hidden';
     }
 
     closeMenu() {
         this.isOpen = false;
         this.hamburger.classList.remove('active');
         this.navMenu.classList.remove('active');
+        
+        // Change icon back to 'Bars'
+        const icon = this.hamburger.querySelector('i');
+        icon.classList.replace('fa-times', 'fa-bars');
+        
         document.body.style.overflow = 'auto';
-        this.navMenu.setAttribute('aria-expanded', 'false');
+    }
+
+    setupGestures() {
+        document.addEventListener('touchstart', (e) => {
+            this.touchStartX = e.touches[0].clientX;
+        }, { passive: true });
+
+        document.addEventListener('touchmove', (e) => {
+            if (!this.isOpen) return;
+            const touchEndX = e.touches[0].clientX;
+            
+            // Swipe right-to-left to close (Professional UX)
+            if (this.touchStartX - touchEndX > 50) {
+                this.closeMenu();
+            }
+        }, { passive: true });
     }
 }
 
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    new MobileMenu();
+});
 // ===== ADVANCED TYPING EFFECT =====
 class TypingEffect {
     constructor() {
