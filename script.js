@@ -50,11 +50,11 @@ class MobileMenu {
         this.isOpen = true;
         this.hamburger.classList.add('active');
         this.navMenu.classList.add('active');
-        
+
         // Change icon to 'X'
         const icon = this.hamburger.querySelector('i');
         icon.classList.replace('fa-bars', 'fa-times');
-        
+
         // Prevent body scroll (Professional touch)
         document.body.style.overflow = 'hidden';
     }
@@ -63,11 +63,11 @@ class MobileMenu {
         this.isOpen = false;
         this.hamburger.classList.remove('active');
         this.navMenu.classList.remove('active');
-        
+
         // Change icon back to 'Bars'
         const icon = this.hamburger.querySelector('i');
         icon.classList.replace('fa-times', 'fa-bars');
-        
+
         document.body.style.overflow = 'auto';
     }
 
@@ -79,7 +79,7 @@ class MobileMenu {
         document.addEventListener('touchmove', (e) => {
             if (!this.isOpen) return;
             const touchEndX = e.touches[0].clientX;
-            
+
             // Swipe right-to-left to close (Professional UX)
             if (this.touchStartX - touchEndX > 50) {
                 this.closeMenu();
@@ -328,64 +328,63 @@ class ProjectModal {
         const card = e.target.closest('.project-card');
         if (!card) return;
 
-        const title = card.querySelector('.project-title')?.textContent || 'Project Title';
+        const title = card.querySelector('.project-title')?.textContent.trim() || 'Project Title';
 
-        // --- 1. SET DEFAULT DATA (সব প্রজেক্টের জন্য বেসিক ডাটা) ---
+        // --- 1. SET DEFAULT DATA ---
         this.currentProject = {
             title: title,
-            description: card.querySelector('.project-desc')?.textContent || '',
-            tags: Array.from(card.querySelectorAll('.tag')).map(tag => tag.textContent),
+            description: card.querySelector('.project-desc')?.textContent.trim() || '',
+            tags: Array.from(card.querySelectorAll('.tag')).map(tag => tag.textContent.trim()),
             image: card.querySelector('img')?.src || '',
-            github: 'https://github.com/2023100000338-alt', // আপনার ডিফল্ট গিটহাব 
-            demo: '#',
+            github: 'https://github.com/2023100000338-alt',
+            demo: card.querySelector('.view-details-btn')?.getAttribute('href') || '#',
             features: [
                 'Responsive Design',
-                'Clean Architecture',
+                'Clean UI/UX Architecture',
                 'Performance Optimized',
-                'Cross-browser Compatible'
+                'Real-time Calculation'
             ]
         };
 
-        // --- 2. SET SPECIFIC PROJECT DATA (নাম অনুযায়ী ডাটা পরিবর্তন) ---
+        // --- 2. SET SPECIFIC PROJECT DATA (Logic Update) ---
 
-        // --- Updated Project Data Logic ---
+        // Project: GradePoint Pro: CGPA Master (University Focus)
+        if (title.includes('CGPA Master')) {
+            this.currentProject.description = `A specialized tool for university students to track academic progress with precise weighted credit calculations and semester-wise history.`;
+            this.currentProject.github = 'https://github.com/2023100000338-alt/GradePoint-Pro-CGPA';
+            this.currentProject.demo = 'https://eb-cgpa-calculator.vercel.app/';
+            this.currentProject.features = ['Weighted Credit Support', 'Multiple Semester Tracking', 'Mobile-First Layout', 'Instant Result Export'];
+        }
 
-        // প্রজেক্ট ১: Bonggo IT Institute
-        if (title.includes('Bonggo IT Institute')) {
-            this.currentProject.description = `Bonggo IT Institute is a high-performance E-learning platform built with the MERN stack. It features role-based dashboards, secure enrollment, and automated invoicing.`;
+        // Project: GradePoint Pro: Unified Grading (SSC/HSC/Uni)
+        else if (title.includes('Unified Grading')) {
+            this.currentProject.description = `An all-in-one grading solution supporting Bangladesh national curriculum (SSC/HSC) and international university standards in one platform.`;
+            this.currentProject.github = 'https://github.com/2023100000338-alt/Unified-Grading-System';
+            this.currentProject.demo = 'https://eb-grading-sy.vercel.app/';
+            this.currentProject.features = ['SSC/HSC Grade Mapping', 'University CGPA Support', 'Dynamic Grade Scale', 'Vercel Deployment'];
+        }
+
+        // Project: Bonggo IT Institute
+        else if (title.includes('Bonggo IT Institute')) {
+            this.currentProject.description = `Bonggo IT Institute is a high-performance E-learning platform built with the MERN stack. It features role-based dashboards and automated invoicing.`;
             this.currentProject.github = 'https://github.com/2023100000338-alt/bongo-it-institute-lms';
             this.currentProject.demo = 'https://bongo-it-institute.vercel.app';
         }
 
-        // প্রজেক্ট: Elite Learner Academy
+        // Project: Elite Learner Academy
         else if (title.includes('Elite Learner Academy')) {
-            this.currentProject.description = `A professional educational platform for IELTS and English preparation. features a clean UI and responsive design for prospective students.`;
-            this.currentProject.github = 'https://github.com/2023100000338-alt/ELA-WEBSITE';
-            this.currentProject.demo = '#';
+            this.currentProject.description = `A professional educational platform for IELTS and English preparation with an optimized UI for prospective students.`;
+            this.currentProject.demo = 'https://ela-website.vercel.app/'; // Demo link updated
         }
 
-        // প্রজেক্ট: CGPA Calculator (GradePoint Pro)
-        else if (title.includes('CGPA') || title.includes('Calculator')) {
-            this.currentProject.description = `A precision university GPA/CGPA calculator. Built for students to track academic progress with a mobile-first, clean interface.`;
-            this.currentProject.github = 'https://github.com/2023100000338-alt/portfoilo'; // Update with specific repo if available
-            this.currentProject.demo = 'https://eb-cgpa-calculator.vercel.app/';
-        }
-
-        // প্রজেক্ট: Modern E-Commerce Platform
+        // Project: Modern E-Commerce
         else if (title.includes('E-Commerce')) {
-            this.currentProject.description = `A modern full-stack shopping experience. Features dynamic product filtering, responsive dashboard, and optimized checkout flow.`;
-            this.currentProject.github = 'https://github.com/2023100000338-alt/react'; // Update with specific repo if available
+            this.currentProject.description = `A modern full-stack shopping experience featuring dynamic filtering, responsive dashboard, and optimized checkout flow.`;
             this.currentProject.demo = 'https://eb-ecomerce.vercel.app/';
-        }
-
-        // প্রজেক্ট: Mama's Restaurant
-        else if (title.includes("Mama's Restaurant")) {
-            this.currentProject.github = 'https://github.com/2023100000338-alt/Mama-s-Restaurant-Management-System';
         }
 
         this.renderModal();
     }
-
     renderModal() {
         this.modal = document.createElement('div');
         this.modal.className = 'glass-modal';
