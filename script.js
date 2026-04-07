@@ -829,7 +829,7 @@ class ContactForm {
         formData.append("message", data.message);
 
         // ⚠️ আপনার Google Apps Script থেকে পাওয়া Web App URL টি নিচের লাইনে বসান
-        const scriptURL = "https://script.google.com/macros/s/AKfycbxyZlTHqGY2wim9qt0gHD00_fT72-eqPwgwYu6ZUnQARIEn1ayt9yvTPeN8JyuD6xX2Zg/exec";
+        const scriptURL = "https://script.google.com/macros/s/AKfycby7yNnyXk73w6Rgnhh5BQ0U4XOl05RbMtEQ8cGrh6n-u8zFq-_9pLVuCwLjD-HTtRk2/exec";
 
         try {
             const response = await fetch(scriptURL, {
